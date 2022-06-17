@@ -4,7 +4,7 @@ import { ExtractJwt, Strategy } from "passport-jwt";
 
 // Create an access token strategy for implementing Passport authentication on access tokens
 @Injectable()
-export class AtStrategy extends PassportStrategy(Strategy, 'jwt-access') {
+export class AtStrategy extends PassportStrategy(Strategy, "jwt-access") {
     constructor() {
         // configure the strategy methods from the PasspratStrategy to be used on AtStrategy
         super({
@@ -12,11 +12,11 @@ export class AtStrategy extends PassportStrategy(Strategy, 'jwt-access') {
             jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
             ignoreExpiration: false,
             // Todo: replace at-secrect with env variable
-            secretOrKey: "at-secret"
-        })
+            secretOrKey: "at-secret",
+        });
     }
     // Extract the payload and by default it is attached to the user object
-    validate(payload: any){
+    validate(payload: any) {
         return payload;
     }
 }
