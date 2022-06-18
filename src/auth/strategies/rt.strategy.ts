@@ -18,7 +18,7 @@ export class RtStrategy extends PassportStrategy(Strategy, "jwt-refresh") {
             passReqToCallback: true,
         });
     }
-    // Extract the payload and by default it is attached to the user object
+    // Extract the payload and by default it is attached to the req.user object
     validate(req: Request, payload: any) {
         const refreshToken = req.get("authorization").replace("Bearer", "").trim();
         return {

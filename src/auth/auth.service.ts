@@ -118,7 +118,47 @@ export class AuthService {
         return tokens;
     }
 
-    signout() {}
+    async signout(userId: number) {
+        // Want to use updateMany here so can find by user id and rt field != null to prevent logout spam
+        await this.prisma.user.updateMany({
+            where: {
+                // Get user by id only id hashed rt is not null
+                id: userId,
+                hashedRefreshToken: {
+                    not: null,
+                },
+            },
+            // Clear out the rt on logout for the user
+            data: {
+                hashedRefreshToken: null,
+            },
+        });
+    }
 
-    refreshTokens() {}
+    async refreshTokens(userId: number, rt: string): Promise<Tokens> {
+        const currentUser = await this.prisma.user
+            .findUnique({
+                where: {
+                    id: userId,
+                },
+            })
+            .catch(error => {
+                if (error instanceof PrismaClientKnownRequestError) {
+                    // Throw error if user not found
+                    if (error.code === "P2001") {
+                        throw new ForbiddenException("Unauthorized");
+                    }
+                }
+                throw error;
+            });
+
+        // decrpyt and check the rt
+        const tokenMatch = await argon2.verify(currentUser.hashedRefreshToken, rt);
+
+        if (!tokenMatch) throw new ForbiddenException("Unauthorized");
+
+        const tokens = await this.getTokens(currentUser.id, currentUser.email);
+        await this.updateRtToken(currentUser.id, tokens.refresh_token);
+        return tokens;
+    }
 }

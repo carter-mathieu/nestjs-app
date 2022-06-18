@@ -15,7 +15,7 @@ export class AtStrategy extends PassportStrategy(Strategy, "jwt-access") {
             secretOrKey: "at-secret",
         });
     }
-    // Extract the payload and by default it is attached to the user object
+    // Extract the payload and by default it is attached to the req.user object
     validate(payload: any) {
         return payload;
     }
