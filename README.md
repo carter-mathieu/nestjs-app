@@ -1,3 +1,6 @@
+# Overview
+This project was performed to learn how to use and manage a project built in the nestjs framework. The reason this project was performed was to keep current with a new alternate technology to the popular expressjs framework.
+
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
 </p>
